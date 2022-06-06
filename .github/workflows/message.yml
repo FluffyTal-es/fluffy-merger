@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: "Hurray!"
         run: |
-          curl -X POST https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }} \
+          curl -X POST https://discord.com/api/webhooks/${{ secrets.WEBHOOK_CHANGELOG_ID }}/${{ secrets.WEBHOOK_CHANGELOG_TOKEN }} \
             -H 'Content-Type: application/json' \
             -d '{
               "content": null,
