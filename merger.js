@@ -47,7 +47,7 @@ const mergeAndCreateChangelog = async () => {
   try {
     const changelogs = await mergeAndCreateChangelog()
     core.debug(changelogs)
-    return core.setOutput('changelogs', JSON.stringify(changelog))
+    return core.setOutput('changelogs', JSON.stringify(changelogs))
   } catch (error) {
     core.setFailed(error.message)
   }
