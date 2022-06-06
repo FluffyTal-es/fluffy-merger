@@ -8723,6 +8723,8 @@ const mergeAndCreateChangelog = async () => {
       per_page: 1000
     })
 
+  core.debug(json.encode(repos))
+
   const changelog_messages = []
 
   repos.data.map(async (repo) => {
