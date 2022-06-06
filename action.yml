@@ -3,6 +3,10 @@ description: Merge all open Pull Requests of the Fluffytales Organisation
 runs:
   using: node16
   main: dist/index.js
+inputs:
+  token:
+    description: 'GitHub API token'
+    required: true
 outputs:
-  matrix:
+  changelogs:
     description: Changelog Message
