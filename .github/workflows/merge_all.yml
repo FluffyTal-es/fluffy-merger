@@ -6,12 +6,15 @@ on:
 jobs:
   merge:
     runs-on: ubuntu-latest
+    outputs:
+      changelogs: ${{ steps.changelog.outputs.changelogs }}
 
     steps:
     - name: Fetch local action
       uses: actions/checkout@v3
 
     - name: Find Pull-Requests to deploy and prepare changelogs
+      id: changelog
       uses: ./
       with:
         token: ${{ secrets.DEPLOY_TOKEN }}
