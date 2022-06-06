@@ -1,4 +1,4 @@
-name: "merge them all"
+name: "post changelogs"
 
 on:
   workflow_run:
