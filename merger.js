@@ -19,7 +19,7 @@ const mergeAndCreateChangelog = async () => {
 
   repos.data.map(async (repo) => {
     const prs = await octokit.rest.search.issuesAndPullRequests({
-      q: `type:pr+repo:FluffyTal-es/${repo.name}`,
+      q: `type:pr+repo:fluffytal-es/${repo.name}`,
       per_page: 100
     })
 
