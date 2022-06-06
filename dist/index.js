@@ -8716,10 +8716,8 @@ const octokit = new Octokit({
 })
 
 const mergeAndCreateChangelog = async () => {
-
-  const {
-    data: { login },
-  } = await octokit.rest.users.getAuthenticated()
+  
+  await octokit.rest.users.getAuthenticated()
 
   const repos = await octokit.rest.repos
     .listForOrg({
@@ -8734,7 +8732,7 @@ const mergeAndCreateChangelog = async () => {
 
   repos.data.map(async (repo) => {
     const prs = await octokit.rest.search.issuesAndPullRequests({
-      q: `type:pr+repo:FluffyTal-es`,
+      q: `type:pr+repo:FluffyTal-es/${repo.name}`,
       per_page: 100
     })
 
