@@ -62,7 +62,7 @@ function timeout(ms) {
       }
     })
 
-    return core.setOutput('changelogs', logs.join('\n'))
+    return core.setOutput('changelogs', logs.join('","'))
   } catch (error) {
     core.setFailed(error.message)
   }
