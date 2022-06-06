@@ -13,7 +13,7 @@ const mergeAndCreateChangelog = async () => {
       per_page: 1000
     })
 
-  core.debug(JSON.encode(repos))
+  core.debug(repos)
 
   const changelog_messages = []
 
@@ -23,7 +23,7 @@ const mergeAndCreateChangelog = async () => {
       per_page: 100
     })
 
-    core.debug(JSON.encode(prs))
+    core.debug(prs)
 
     prs.data.items.map(async (pr) => {
       /*await github.rest.pulls.createReview({
