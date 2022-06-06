@@ -1,0 +1,102 @@
+name: "merge them all"
+
+on:
+  workflow_run:
+    workflows:
+      - merge them all
+    types: 
+      - completed
+jobs:
+  get-changelogs:
+    outputs:
+      changelogs: ${{ steps.workflow-changelogs.outputs.changelogs }}
+    runs-on: ubuntu-latest
+    steps:      
+      - uses: actions/github-script@v6
+        id: get-artifact-id
+        with:
+          github-token: ${{ secrets.DEPLOY_TOKEN }}
+          result-encoding: string
+          script: |
+            const result = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: '${{github.repository_owner}}',
+              repo: '${{github.event.repository.name}}',
+              run_id: ${{github.event.workflow_run.id}}
+            })
+            return result.data.artifacts.filter(a => a.name === 'changelogs')[0].archive_download_url
+
+      - name: Get workflow changelogs
+        id: workflow-changelogs
+        run: |
+          echo "${{steps.get-artifact-id.outputs.result}}"
+          curl -L -H "Authorization: token ${{github.token}}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -o changelogs.zip \
+            ${{steps.get-artifact-id.outputs.result}}
+          unzip ./changelogs.zip
+          cat ./changelogs.json
+          JSON=$(cat ./changelogs.json)
+          echo "::set-output name=changelogs::${JSON//'%'/'%25'}"
+  on-success:
+    needs: [get-changelogs]
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: "Hurray!"
+        run: |
+          githubjson=`cat ${{ fromJSON(needs.get-changelogs.outputs.changelogs) }}`
+          logs=`echo $(jq join('\n') <<< "$githubjson")`
+          curl -X POST https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }} \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "content": null,
+              "embeds": [
+                {
+                  "title": ":+1: Hurray!",
+                  "description": "Es gibt Neuigkeiten!\n\n**$logs**\n\nBis zum nächsten mal! :kissing_heart: :emote4: ",
+                  "color": 65402,
+                  "footer": {
+                    "text": "Ab dem nächsten Restart"
+                  },
+                  "timestamp": "${{ github.event.workflow_run.updated_at }}"
+                }
+              ],
+              "username": "FluffyTales Changelogs",
+              "avatar_url": "https://cdn.fluffytal.es/servericon.png"
+            }'
+      - name: "Clean up"
+        if: always()
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: status
+   
+  on-failure:
+    needs: [get-status]
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: "Nay!"
+        run: |
+          curl -X POST https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }} \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "content": null,
+              "embeds": [
+                {
+                  "title": ":-1: Nay!",
+                  "description": "The **Live Deployment** has failed! Please check it on Github!",
+                  "color": 16711782,
+                  "footer": {
+                    "text": "Failed"
+                  },
+                  "timestamp": "${{ github.event.workflow_run.updated_at }}"
+                }
+              ],
+              "username": "FluffyTales GitBot",
+              "avatar_url": "https://cdn.fluffytal.es/servericon.png"
+            }'
+      - name: "Clean up"
+        if: always()
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: status

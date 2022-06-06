@@ -1,0 +1,8 @@
+name: FluffyTales Merger
+description: Merge all open Pull Requests of the Fluffytales Organisation
+runs:
+  using: node16
+  main: dist/index.js
+outputs:
+  matrix:
+    description: Changelog Message
