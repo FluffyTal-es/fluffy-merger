@@ -22,7 +22,7 @@ const mergeAndCreateChangelog = async () => {
     })
 
     const titles = await prs.data.map(async (pr) => {
-      await octokit.rest.pulls.createReview({
+      await octokit.rest.pulls.submitReview({
         event: "APPROVE",
         owner: repo.owner,
         repo: repo.repo,
