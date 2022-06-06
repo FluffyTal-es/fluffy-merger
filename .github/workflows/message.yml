@@ -44,8 +44,6 @@ jobs:
     steps:
       - name: "Hurray!"
         run: |
-          githubjson=`cat ${{ fromJSON(needs.get-changelogs.outputs.changelogs) }}`
-          logs=`echo $(jq join('\n') <<< "$githubjson")`
           curl -X POST https://discord.com/api/webhooks/${{ secrets.WEBHOOK_ID }}/${{ secrets.WEBHOOK_TOKEN }} \
             -H 'Content-Type: application/json' \
             -d '{
@@ -53,7 +51,7 @@ jobs:
               "embeds": [
                 {
                   "title": ":+1: Hurray!",
-                  "description": "Es gibt Neuigkeiten!\n\n**$logs**\n\nBis zum nächsten mal! :kissing_heart: :emote4: ",
+                  "description": "Es gibt Neuigkeiten!\n\n**${{ needs.get-changelogs.outputs.changelogs }}**\n\nBis zum nächsten mal! :kissing_heart: :emote4: ",
                   "color": 65402,
                   "footer": {
                     "text": "Ab dem nächsten Restart"

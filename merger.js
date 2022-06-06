@@ -6,7 +6,6 @@ const octokit = new Octokit({
 })
 
 const mergeAndCreateChangelog = async () => {
-  
   await octokit.rest.users.getAuthenticated()
 
   const repos = await octokit.rest.repos
@@ -16,19 +15,13 @@ const mergeAndCreateChangelog = async () => {
       per_page: 1000
     })
 
-  core.debug(repos)
-
-  const changelog_messages = []
-
-  repos.data.map(async (repo) => {
-    const prs = await octokit.rest.search.issuesAndPullRequests({
-      q: `type:pr+repo:FluffyTal-es/${repo.name}`,
-      per_page: 100
+  const changelog_messages = await repos.data.map(async (repo) => {
+    const prs = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
+      owner: 'FluffyTal-es',
+      repo: repo.name
     })
 
-    //core.debug(prs)
-
-    prs.data.items.map(async (pr) => {
+    const titles = await prs.data.map(async (pr) => {
       /*await github.rest.pulls.createReview({
         event: "APPROVE",
         owner: repo.owner,
@@ -41,16 +34,16 @@ const mergeAndCreateChangelog = async () => {
         owner: repo.owner,
         repo: repo.repo,
         pull_number: pr.number
-      })*/
-      
-      core.debug(pr.title)
-      changelog_messages.push(pr.title)
-    })
+      })
+      */
 
-    await timeout(1000)
+      return pr.title
+    }) 
+
+    return await Promise.all(titles)
   })
 
-  return changelog_messages
+  return await Promise.all(changelog_messages)
 }
 
 function timeout(ms) {
@@ -60,8 +53,16 @@ function timeout(ms) {
 (async () => {
   try {
     const changelogs = await mergeAndCreateChangelog()
-    core.debug(changelogs)
-    return core.setOutput('changelogs', JSON.stringify(changelogs))
+
+    const logs = []
+
+    changelogs.forEach(l => {
+      if (l.length > 0) {
+        logs.push(...l)
+      }
+    })
+
+    return core.setOutput('changelogs', logs.join('\n'))
   } catch (error) {
     core.setFailed(error.message)
   }
