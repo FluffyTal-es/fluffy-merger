@@ -8731,6 +8731,8 @@ const mergeAndCreateChangelog = async () => {
       per_page: 100
     })
 
+    core.debug(json.encode(prs))
+
     prs.data.items.map(async (pr) => {
       /*await github.rest.pulls.createReview({
         event: "APPROVE",
@@ -8745,7 +8747,8 @@ const mergeAndCreateChangelog = async () => {
         repo: repo.repo,
         pull_number: pr.number
       })*/
-
+      
+      core.debug(pr.title)
       changelog_messages.push(pr.title)
     })
   })
