@@ -8732,14 +8732,14 @@ const mergeAndCreateChangelog = async () => {
     })
 
     const titles = await prs.data.map(async (pr) => {
-      await github.rest.pulls.createReview({
+      await octokit.rest.pulls.createReview({
         event: "APPROVE",
         owner: repo.owner,
         repo: repo.repo,
         pull_number: pr.number
       })
 
-      await github.rest.pulls.merge({
+      await octokit.rest.pulls.merge({
         merge_method: "merge",
         owner: repo.owner,
         repo: repo.repo,
