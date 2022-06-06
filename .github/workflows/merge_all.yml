@@ -26,7 +26,7 @@ jobs:
     steps:
     - name: "add changelogs"
       run: |
-        echo {\"message\":[\""${{ needs.merge.outputs.changelogs }}"\"]} > changelogs.json
+        echo "${{ needs.merge.outputs.changelogs }}" > changelogs.txt
     
     - uses: actions/upload-artifact@v2
       with:

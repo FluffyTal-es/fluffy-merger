@@ -10,7 +10,7 @@ jobs:
   get-changelogs:
     outputs:
       changelogs: ${{ steps.workflow-changelogs.outputs.changelogs }}
-      
+
     runs-on: ubuntu-latest
     steps:      
       - uses: actions/github-script@v6
@@ -35,9 +35,9 @@ jobs:
             -o changelogs.zip \
             ${{steps.get-artifact-id.outputs.result}}
           unzip ./changelogs.zip
-          cat ./changelogs.json
-          JSON=$(cat ./changelogs.json)
-          echo "::set-output name=changelogs::${JSON//'%'/'%25'}"
+          cat ./changelogs.txt
+          JSON=$(cat ./changelogs.txt)
+          echo "::set-output name=changelogs::${JSON}"
   on-success:
     needs: [get-changelogs]
     runs-on: ubuntu-latest
