@@ -51,7 +51,7 @@ jobs:
               "embeds": [
                 {
                   "title": ":+1: Hurray!",
-                  "description": "Es gibt Neuigkeiten!\n\n**${{ fromJson(needs.get-changelogs.outputs.changelogs).message }}**\n\nBis zum nächsten mal! :kissing_heart: :emote4: ",
+                  "description": "Es gibt Neuigkeiten!\n\n**${{ fromJSON(needs.get-changelogs.outputs.changelogs).message }}**\n\nBis zum nächsten mal! :kissing_heart: :emote4: ",
                   "color": 65402,
                   "footer": {
                     "text": "Ab dem nächsten Restart"
