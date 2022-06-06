@@ -8732,7 +8732,7 @@ const mergeAndCreateChangelog = async () => {
     })
 
     const titles = await prs.data.map(async (pr) => {
-      /*await github.rest.pulls.createReview({
+      await github.rest.pulls.createReview({
         event: "APPROVE",
         owner: repo.owner,
         repo: repo.repo,
@@ -8745,7 +8745,6 @@ const mergeAndCreateChangelog = async () => {
         repo: repo.repo,
         pull_number: pr.number
       })
-      */
 
       return pr.title
     }) 
