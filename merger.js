@@ -6,6 +6,11 @@ const octokit = new Octokit({
 })
 
 const mergeAndCreateChangelog = async () => {
+
+  const {
+    data: { login },
+  } = await octokit.rest.users.getAuthenticated()
+
   const repos = await octokit.rest.repos
     .listForOrg({
       org: 'FluffyTal-es',
@@ -19,11 +24,11 @@ const mergeAndCreateChangelog = async () => {
 
   repos.data.map(async (repo) => {
     const prs = await octokit.rest.search.issuesAndPullRequests({
-      q: `type:pr+repo:fluffytal-es/${repo.name}`,
+      q: `type:pr+repo:FluffyTal-es`,
       per_page: 100
     })
 
-    core.debug(prs)
+    //core.debug(prs)
 
     prs.data.items.map(async (pr) => {
       /*await github.rest.pulls.createReview({
@@ -43,9 +48,15 @@ const mergeAndCreateChangelog = async () => {
       core.debug(pr.title)
       changelog_messages.push(pr.title)
     })
+
+    await timeout(1000)
   })
 
   return changelog_messages
+}
+
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 (async () => {
