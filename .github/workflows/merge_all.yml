@@ -31,6 +31,6 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: changelogs
-        path: changelogs.json
+        path: changelogs.txt
     
 
