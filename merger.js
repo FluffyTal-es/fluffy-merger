@@ -22,27 +22,30 @@ const mergeAndCreateChangelog = async () => {
     })
 
     const titles = await prs.data.map(async (pr) => {
-      await octokit.rest.pulls.submitReview({
-        event: "APPROVE",
-        owner: repo.owner,
-        repo: repo.repo,
-        pull_number: pr.number
-      })
-
-      await octokit.rest.pulls.merge({
-        merge_method: "merge",
-        owner: repo.owner,
-        repo: repo.repo,
-        pull_number: pr.number
-      })
+      try {
+        await octokit.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews', {
+          owner: 'FluffyTal-es',
+          repo: repo.name,
+          pull_number: pr.number
+        })
+  
+        await octokit.rest.pulls.merge({
+          merge_method: "merge",
+          owner: 'FluffyTal-es',
+          repo: repo.name,
+          pull_number: pr.number
+        })
+      } catch(e) {
+        console.log(e)
+      }
 
       return pr.title
     }) 
 
-    return await Promise.all(titles)
+    return Promise.all(titles)
   })
 
-  return await Promise.all(changelog_messages)
+  return Promise.all(changelog_messages)
 }
 
 function timeout(ms) {
