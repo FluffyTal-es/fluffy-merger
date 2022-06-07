@@ -1,7 +1,9 @@
 name: "merge them all"
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+  schedule:
+    - cron: '30 5,11,17,23 * * *'
 
 jobs:
   merge:
