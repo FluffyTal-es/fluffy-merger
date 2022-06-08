@@ -5,6 +5,20 @@ const octokit = new Octokit({
   auth: core.getInput('token')
 })
 
+const randomMessages = [
+  'und einige Kleinigkeiten...',
+  'den ein oder anderen Käfer zerquetscht :bug:',
+  'die Katze mal wieder gefüttert <:emote1:960226085272944660>',
+  'dinge fluffiger gemacht <:emote1:960226085272944660>',
+  'paar nicht so nennenswerte Dinge erledigt',
+  'hier könnte Ihre Werbung stehen!',
+  'und noch einiges mehr!',
+  'finds IC raus!',
+  'Socken mal wieder gewaschen',
+  'Pfand weggebracht',
+  'die Welt gerettet'
+]
+
 const mergeAndCreateChangelog = async () => {
   await octokit.rest.users.getAuthenticated()
 
@@ -47,20 +61,6 @@ const mergeAndCreateChangelog = async () => {
 
   return Promise.all(changelog_messages)
 }
-
-const randomMessages = [
-  'und einige Kleinigkeiten...',
-  'den ein oder anderen Käfer zerquetscht :bug:',
-  'die Katze mal wieder gefüttert <:emote1:960226085272944660>',
-  'dinge fluffiger gemacht <:emote1:960226085272944660>',
-  'paar nicht so nennenswerte Dinge erledigt',
-  'hier könnte Ihre Werbung stehen!',
-  'und noch einiges mehr!',
-  'finds IC raus!',
-  'Socken mal wieder gewaschen',
-  'Pfand weggebracht',
-  'die Welt gerettet'
-]
 
 (async () => {
   try {
