@@ -73,10 +73,10 @@ const mergeAndCreateChangelog = async () => {
         logs.push(...l)
       }
     })
+    
+    if (logs.length === 0) return core.setOutput('changelogs', 'false')
 
     logs.push(randomMessages[Math.floor(Math.random()*randomMessages.length)])
-
-    if (logs.length === 0) return core.setOutput('changelogs', 'false')
 
     return core.setOutput('changelogs', logs.join("\\n - "))
   } catch (error) {
