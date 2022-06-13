@@ -8784,9 +8784,9 @@ const mergeAndCreateChangelog = async () => {
       }
     })
 
-    logs.push(randomMessages[Math.floor(Math.random()*randomMessages.length)])
-
     if (logs.length === 0) return core.setOutput('changelogs', 'false')
+    
+    logs.push(randomMessages[Math.floor(Math.random()*randomMessages.length)])
 
     return core.setOutput('changelogs', logs.join("\\n - "))
   } catch (error) {
