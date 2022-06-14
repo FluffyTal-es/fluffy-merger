@@ -54,7 +54,7 @@ jobs:
               "embeds": [
                 {
                   "title": ":+1: Hurray!",
-                  "description": "Es gibt Neuigkeiten!\n\n**- ${{ needs.get-changelogs.outputs.changelogs }}**\n\nBis zum nächsten mal! :kissing_heart: <:emote4:960227871161475212> ",
+                  "description": "Es gibt Neuigkeiten!\n\n**- ${{ needs.get-changelogs.outputs.changelogs }}**\n\nSchaut auch mal bei den ganzen Social Media Kanälen rein via @fluffytalesrp\n\nBis zum nächsten mal! :kissing_heart: <:emote4:960227871161475212> ",
                   "color": 65402,
                   "footer": {
                     "text": "Ab dem nächsten Restart"
